@@ -1,0 +1,20 @@
+# 虛擬環境
+venv/
+
+# 環境變數（含敏感資訊）
+.env
+
+# Airflow 執行日誌
+logs/
+
+# GCP 服務帳戶金鑰（絕對不能上傳）
+*.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db
