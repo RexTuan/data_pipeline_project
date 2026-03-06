@@ -1,5 +1,10 @@
 import psycopg2
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+TOKEN = os.getenv("FINMIND_TOKEN")
 
 
 def fetch_stock_data(stock_id, target_date, token):
@@ -73,12 +78,11 @@ def fetch_and_upsert_stock(stock_id, target_date, token, db_host="postgres"):
 
 # ── 本機測試用（直接執行此檔案時才會跑） ──
 if __name__ == "__main__":
-    TOKEN = "貼上你的FinMind_Token"
     STOCK_ID = "2330"
     DATE = "2025-01-02"  # 選一個過去的交易日
 
-    # 先只測試 API，不寫 DB
     data = fetch_stock_data(STOCK_ID, DATE, TOKEN)
     print(f"取得 {len(data)} 筆資料")
     if data:
         print("第一筆資料:", data[0])
+        upsert_to_postgres(data, host="localhost")
