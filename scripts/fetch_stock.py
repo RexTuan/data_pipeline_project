@@ -63,9 +63,11 @@ def upsert_stock_info(cur, row):
             market_type       = EXCLUDED.market_type,
             updated_date      = EXCLUDED.updated_date;
     """
+    # 部分股票日期為 None，轉成 NULL 避免 PostgreSQL 報錯
+    date_val = row["date"] if row["date"] and row["date"] != "None" else None
     cur.execute(sql, (
         row["stock_id"], row["stock_name"],
-        row["industry_category"], row["type"], row["date"]
+        row["industry_category"], row["type"], date_val
     ))
 
 
@@ -144,7 +146,13 @@ def upsert_to_postgres(dataset, data_list, host="localhost"):
     cur = conn.cursor()
 
     for row in data_list:
-        config["upsert_fn"](cur, row)
+        try:
+            config["upsert_fn"](cur, row)
+        except Exception as e:
+            print(f"❌ 錯誤資料：{row}")
+            print(f"   錯誤訊息：{e}")
+            conn.rollback()
+            cur = conn.cursor()  # 重新開啟 cursor 繼續跑
 
     conn.commit()
     cur.close()

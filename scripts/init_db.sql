@@ -24,10 +24,10 @@ CREATE TABLE IF NOT EXISTS tw_stock_price (
 
 -- 2. 台股總覽（靜態，偶爾更新）
 CREATE TABLE IF NOT EXISTS tw_stock_info (
-    stock_id          VARCHAR(10) NOT NULL,
-    stock_name        VARCHAR(50),
-    industry_category VARCHAR(50),
-    market_type       VARCHAR(10),
+    stock_id          VARCHAR(20)  NOT NULL,
+    stock_name        VARCHAR(100),
+    industry_category VARCHAR(100),
+    market_type       VARCHAR(50),
     updated_date      DATE,
     PRIMARY KEY (stock_id)
 );
